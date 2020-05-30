@@ -1,0 +1,176 @@
+{% extends 'base.html' %}
+{% block head-bg %}
+    dark-bg
+{% endblock %}
+
+{% block blog %}
+    <section class="row content-wrap">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 single-post-contents">
+                <article class="single-post-content row m0 post">
+                    <header class="row">
+                        <h5 class="post-meta">
+                            <a href="#" class="date">{{ post.created_at|date:'M d, Y' }}</a>
+                            <span class="post-author"><i>by</i><a href="#">{{ author.name }}</a></span>
+                        </h5>
+                        <h2 class="post-title">{{ post.title }}</h2>
+                        <div class="row">
+                            <h5 class="taxonomy pull-left"><i>in</i>
+                                {% for tag in tags %}
+                                    <a href="#">{{ tag.tag_name }}</a>,
+                                {% endfor %}
+                            </h5>
+                            <div class="response-count pull-right">
+                                <img src="{{ media }}images/comment-icon-gray.png" alt="">
+                                {{ comments_cnt }}
+                            </div>
+                        </div>
+                    </header>
+                    <div class="featured-content row m0">
+                        <div class="thumbCarousel row m0">
+                            <div id="slider" class="flexslider">
+                                <ul class="slides">
+                                    {% for image in images %}
+                                        <li><img style="height: 500px; width: 750px" src="{{ image.image.url }}" alt=""></li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            <div id="carousel" class="flexslider">
+                                <ul class="slides">
+                                    {% for image in images %}
+                                        <li><img style="height: 60px; width: 90px" src="{{ image.image.url }}" alt=""></li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-content row">
+                        <h4>{{ post.sub_intro }}</h4>
+                        <br>
+                        <h3>{{ post.sub_title }}</h3>
+                        <br>
+                        <p>{{ post.intro }}</p>
+                        <br>
+                        <blockquote class="has-sign row m0">
+                            <div>
+                                <p>{{ post.quote.quote }}</p>
+                                <footer>{{ post.quote.author }}</footer>
+                            </div>
+                        </blockquote>
+
+                        <blockquote class="no-sign">
+                            <p>{{ post.highlighted_text }}</p>
+                        </blockquote>
+                        <br>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <p>{{ post.post_body_left }}</p>
+                            </div>
+                            <div class="col-sm-6">
+                                <p>{{ post.post_body_right }}</p>
+                            </div>
+                        </div>
+                        <br>
+
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <iframe width="853" height="480" src="{{ post.youtube_link }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                        <br>
+
+                        <br>
+                        <p>{{ post.post_footer }}</p>
+                    </div>
+                    <div class="row m0 tags">
+                        {% for tag in tags %}
+                            <a href="#" class="tag">{{ tag.tag_name }}</a>
+                        {% endfor %}
+                    </div>
+
+                    <ul class="pager">
+                        <li>
+                            <h4>Previous Articles</h4>
+                            <h2 class="post-title"><a href="blog.html">Nature, in the broadest sense, is the natural...</a></h2>
+                            <h5 class="taxonomy pull-left"><i>in</i> <a href="#">image</a>, <a href="#">entertainment</a></h5>
+                        </li>
+                        <li>
+                            <h4>Next Articles</h4>
+                            <h2 class="post-title"><a href="blog.html">Nature, in the broadest sense, is the natural...</a></h2>
+                            <h5 class="taxonomy pull-left"><i>in</i> <a href="#">image</a>, <a href="#">entertainment</a></h5>
+                        </li>
+                    </ul>
+
+                    <div class="row m0 comments">
+                        <h5 class="response-count">{{ comments_cnt }} comments<a href="#comment-form" class="btn btn-primary pull-right"><span>add comment</span></a></h5>
+                        <!--Comments-->
+                        {% for comment in comments %}
+                            <div class="media comment">
+                                <div class="media-left">
+                                    <a href="#"><img src="{{ comment.picture.url }}" alt="" class="img-circle"></a>
+                                </div>
+                                <div class="media-body">
+                                    <h4><a href="#">{{ comment.comment_author }}</a></h4>
+                                    <h5><a href="#" class="date">{{ comment.created_at|date:'M d, Y' }} at {{ comment.created_at|date:'h:i A' }}</a> | <a href="#" class="reply-link">reply</a></h5>
+                                    <p>{{ comment.comment_body }}</p>
+                                    <!--Reply-->
+    {#                                <div class="media comment reply">#}
+    {#                                    <div class="media-left">#}
+    {#                                        <a href="#"><img src="{{ media }}images/posts/c2.jpg" alt="" class="img-circle"></a>#}
+    {#                                    </div>#}
+    {#                                    <div class="media-body">#}
+    {#                                        <h4><a href="#">Mark Sanders</a></h4>#}
+    {#                                        <h5><a href="#" class="date">feb 17, 2018 at 3:30pm</a> | <a href="#" class="reply-link">reply</a></h5>#}
+    {#                                        <p>Remaining essentially unchanged.</p>#}
+    {#                                    </div>#}
+    {#                                </div>#}
+                                </div>
+                            </div>
+                        {% endfor %}
+
+                    </div>
+                    <form action="#" method="post" class="comment-form row" id="comment-form">
+                        {% csrf_token %}
+                        <h5 class="form-title">leave a reply</h5>
+                        <div class="form-group col-sm-6">
+                            <label for="name">full name*</label>
+                            {{ comment_form.comment_author }}
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label for="email">Email</label>
+                            {{ comment_form.email }}
+                        </div>
+                        <div class="form-group col-sm-12">
+                            <label for="message">message*</label>
+                            {{ comment_form.comment_body }}
+                        </div>
+                        <div class="col-sm-12">
+                            <button type="submit" class="btn-primary"><span>send</span></button>
+                            <h5 class="pull-right">*required fields</h5>
+                        </div>
+                    </form>
+                </article>
+            </div>
+            <div class="col-md-4 sidebar">
+                <!--Author Widget-->
+                <aside class="row m0 widget-author widget">
+                    <div class="widget-author-inner row">
+                        <div class="author-avatar row"><a href="#"><img src="{{ author.profile_pic.url }}" alt="" class="img-circle"></a></div>
+                        <a href="#"><h2 class="author-name">{{ author.name }}</h2></a>
+                        <h5 class="author-title">{{ author.bio }}</h5>
+                        <p>{{ author.title }}</p>
+                        <a href="#" class="know-more">know more</a>
+                    </div>
+                    <ul class="nav social-nav">
+                        <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                        <li><a href="#"><i class="fa fa-facebook-official"></i></a></li>
+                        <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+                        <li><a href="#"><i class="fa fa-instagram"></i></a></li>
+                        <li><a href="#"><i class="fa fa-envelope"></i></a></li>
+                    </ul>
+                </aside>
+
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

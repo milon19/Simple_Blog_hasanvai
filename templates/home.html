@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% block head-bg %}
+    transparent
+ {% endblock %}
+{% block blog %}
+    <section class="row featured-post-carousel">
+        {% for post in featured_posts %}
+            <div class="item post">
+                <img src="{{ post.image.url }}" alt="" class="img-responsive main-bg">
+                <div class="post-content">
+                    <div class="container">
+                        <h5 class="post-meta"><i>in</i> {{ post.quote.author }} | {{ post.created_at|date:"M d, Y" }}</h5>
+                        <h2 class="post-title"><a>{{ post.quote.quote }}</a></h2>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </section>
+    <section class="row content-wrap">
+        <div class="container">
+            <div class="row" id="post-masonry">
+                <!--Blog Post-->
+                {% for post in posts %}
+
+                    {% if forloop.counter > 2 and forloop.counter == 3 %}
+                        <aside class="col-sm-4 widget-author widget widget-with-posts post">
+                            <div class="widget-author-inner row">
+                                <div class="author-avatar row"><a href="#"><img src="{{ author.profile_pic.url }}" alt="" class="img-circle"></a></div>
+                                <a href="#"><h2 class="author-name">{{ author.name }}</h2></a>
+                                <h5 class="author-title">{{ author.bio }}</h5>
+                                <p>{{ author.title }}</p>
+                                <a href="#" class="know-more">know more</a>
+                            </div>
+                            <ul class="nav social-nav">
+                                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                                <li><a href="#"><i class="fa fa-facebook-official"></i></a></li>
+                                <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+                                <li><a href="#"><i class="fa fa-instagram"></i></a></li>
+                                <li><a href="#"><i class="fa fa-envelope"></i></a></li>
+                            </ul>
+                        </aside>
+                    {% endif %}
+
+                    <article class="col-sm-4 post post-masonry post-format-gallery">
+                        <div class="post-wrapper row">
+                            <div class="featured-content row">
+                                <div class="gallery-of-post">
+                                    {% for image in post.images.all %}
+                                        <div class="item"><img style="height: 240px; width: 360px;" src="{{ image.image.url }}" alt=""></div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="post-excerpt row">
+                                <h5 class="post-meta">
+                                    <a href="#" class="date">{{ post.created_at|date:'M d, Y' }}</a>
+                                    <span class="post-author"><i>by</i><a href="#">{{ post.author.name }}</a></span>
+                                </h5>
+                                <h3 class="post-title"><a href="{% url 'blog-detail' post.pk %}">{{ post.title }}</a></h3>
+                                <p>{{ post.sub_intro }}</p>
+                                <footer class="row">
+                                    <h5 class="taxonomy"><i>in</i>
+                                        {% for tag in post.tags.all %}
+                                            <a href="#">{{ tag.tag_name }}</a>,
+                                        {% endfor %}
+                                    </h5>
+                                    <div class="response-count"><img src="{{ media }}images/comment-icon-gray.png" alt="">{{ post.comments.count }}</div>
+                                </footer>
+                            </div>
+                        </div>
+                    </article>
+                {% endfor %}
+
+                <!--Author Widget-->
+                {% if posts_count < 3 %}
+                    <aside class="col-sm-4 widget-author widget widget-with-posts post">
+                            <div class="widget-author-inner row">
+                                <div class="author-avatar row"><a href="#"><img src="{{ author.profile_pic.url }}" alt="" class="img-circle"></a></div>
+                                <a href="#"><h2 class="author-name">{{ author.name }}</h2></a>
+                                <h5 class="author-title">{{ author.bio }}</h5>
+                                <p>{{ author.title }}</p>
+                                <a href="#" class="know-more">know more</a>
+                            </div>
+                            <ul class="nav social-nav">
+                                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                                <li><a href="#"><i class="fa fa-facebook-official"></i></a></li>
+                                <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+                                <li><a href="#"><i class="fa fa-instagram"></i></a></li>
+                                <li><a href="#"><i class="fa fa-envelope"></i></a></li>
+                            </ul>
+                        </aside>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+{% endblock %}
